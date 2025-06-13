@@ -1,27 +1,39 @@
 <template>
-  <div id="basicLayout">
-    <a-layout style="height: 400px">
-      <a-layout-header class="header">
-        <global-header />
-      </a-layout-header>
-      <a-layout-content class="content">
-        <router-view />
-      </a-layout-content>
-      <a-layout-footer class="footer">
-        <a href="#">VOJ你值得拥有</a>
-      </a-layout-footer>
-    </a-layout>
+  <div id="body">
+    <div id="basicLayout">
+      <a-layout>
+        <a-layout-header class="header">
+          <global-header />
+        </a-layout-header>
+        <a-layout-content class="content">
+          <router-view />
+        </a-layout-content>
+      </a-layout>
+
+      <GlobalFooter />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import GlobalHeader from "@/layouts/GlobalHeader.vue";
+import GlobalFooter from "@/layouts/GlobalFooter.vue";
 </script>
 
 <style scoped>
-#basicLayout {
+#body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
+#basicLayout {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 内容区样式 */
 #basicLayout .header {
   margin-bottom: 20px;
   box-shadow: #eee 1px 1px 5px;
@@ -29,16 +41,7 @@ import GlobalHeader from "@/layouts/GlobalHeader.vue";
 
 #basicLayout .content {
   background-color: #42b983;
-  margin-bottom: 20px;
-}
-
-#basicLayout .footer {
-  background-color: #00fffb;
-  padding: 16px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  text-align: center;
+  flex: 1;
+  padding: 20px; /* 给点空间更美观 */
 }
 </style>

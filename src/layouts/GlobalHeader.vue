@@ -13,7 +13,8 @@
           >
             <a-menu-item key="0" :style="{ padding: 0 }" disabled>
             </a-menu-item>
-            <a-menu-item v-for="item in routes" :key="item.path">
+
+            <a-menu-item v-for="item in showRoutes" :key="item.path">
               {{ item.name }}
             </a-menu-item>
           </a-menu>
@@ -21,7 +22,7 @@
       </a-col>
       <a-col flex="100px">
         <div>
-          {{ store.state.user.loginUser.username }}
+          {{ store.state.user.loginUser.userName }}
         </div>
       </a-col>
     </a-row>
@@ -32,19 +33,35 @@
 import { routes } from "../router/routes";
 
 import { useRoute, useRouter } from "vue-router";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useStore } from "vuex";
+import checkAccess from "@/permissions/checkAccess";
+import ACCESS_ENUM from "@/permissions/AccessEnum";
 
 const router = useRouter();
 
-const doMenuClick = (key: string) => {
-  router.push({
-    path: key,
+// 获取状态变量store
+const store = useStore();
+
+// 调用user模块的action
+const userInfo = computed(() => store.state.user.loginUser);
+
+//将可显示的路由过滤出来放到数组中进行显示
+const showRoutes = computed(() => {
+  return routes.filter((item, index) => {
+    //所有人都隐藏的菜单
+    if (item.meta?.hideInMenu) {
+      return false;
+    }
+    //对特定类型用户隐藏的菜单
+    if (!checkAccess(userInfo.value, item.meta?.access as string)) {
+      return false;
+    }
+    return true;
   });
-};
+});
 
 const selectKeys = ref(["/"]);
-
 /**
  * 方法一：使用router.afterEach点击后采用ref响应式数据动态修改高亮
  * 每次路由跳转完成之后，自动执行某段代码
@@ -64,9 +81,18 @@ watch(
   }
 );
 
-// 获取状态变量store
-const store = useStore();
-store.dispatch("user/getLoginUser");
+const doMenuClick = (key: string) => {
+  router.push({
+    path: key,
+  });
+};
+
+// setTimeout(() => {
+//   store.dispatch("user/getLoginUser", {
+//     username: "vv",
+//     userRole: ACCESS_ENUM.ADMIN,
+//   });
+// }, 2000);
 </script>
 
 <style scoped>
