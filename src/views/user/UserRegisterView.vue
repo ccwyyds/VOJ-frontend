@@ -70,7 +70,7 @@ const handleRegister = async () => {
     });
     if (res.code === 0) {
       message.success("注册成功，请登录");
-      router.push("/user/login");
+      await router.push("/user/login");
     } else {
       message.error("注册失败：" + res.message);
     }
