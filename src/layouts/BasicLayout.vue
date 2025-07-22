@@ -16,8 +16,8 @@
 </template>
 
 <script setup lang="ts">
-import GlobalHeader from "@/layouts/GlobalHeader.vue";
-import GlobalFooter from "@/layouts/GlobalFooter.vue";
+import GlobalHeader from "@/components/GlobalHeader.vue";
+import GlobalFooter from "@/components/GlobalFooter.vue";
 </script>
 
 <style scoped>
@@ -40,7 +40,7 @@ import GlobalFooter from "@/layouts/GlobalFooter.vue";
 }
 
 #basicLayout .content {
-  background-color: #42b983;
+  background-color: #ffffff;
   flex: 1;
   padding: 20px; /* 给点空间更美观 */
 }
