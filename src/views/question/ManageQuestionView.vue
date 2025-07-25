@@ -5,10 +5,11 @@
       :data="dataList"
       :pagination="{
         pageSize: searchParams.pageSize,
-        current: searchParams.pageNum,
+        current: searchParams.current,
         total,
         showTotal: true,
       }"
+      @page-change="onPageChange"
     >
       <template #optional="{ record }">
         <a-space>
@@ -25,12 +26,13 @@ import { onMounted, ref } from "vue";
 import { Question, QuestionControllerService } from "../../../generated";
 import message from "@arco-design/web-vue/es/message";
 import { useRouter } from "vue-router";
+import "@arco-design/web-vue/dist/arco.css";
 
 const dataList = ref([]);
 const total = ref(0);
 const searchParams = ref({
   pageSize: 10,
-  pageNum: 1,
+  current: 1,
 });
 
 const loadData = async () => {
@@ -119,6 +121,11 @@ const doUpdate = (question: Question) => {
       id: question.id,
     },
   });
+};
+
+const onPageChange = async (page: number) => {
+  searchParams.value.current = page;
+  await loadData();
 };
 </script>
 
