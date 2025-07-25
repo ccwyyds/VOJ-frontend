@@ -109,8 +109,8 @@ const columns = [
     width: 40,
   },
   {
-    title: "id",
-    dataIndex: "id",
+    title: "编号",
+    dataIndex: "questionNum",
   },
   {
     title: "标题",

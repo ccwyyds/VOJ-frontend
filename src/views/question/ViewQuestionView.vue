@@ -25,7 +25,7 @@
       <a-col :md="6" :xs="24">
         <a-card class="info-card">
           <div style="display: flex; flex-direction: column">
-            <div>题目编号：{{ question?.id }}</div>
+            <div>题目编号：{{ question?.questionNum }}</div>
             <div style="margin-top: 20px">
               提供者：{{ question?.userVO.userName }}
             </div>
