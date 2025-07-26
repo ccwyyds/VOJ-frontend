@@ -27,7 +27,11 @@
           </a-select>
         </a-form-item>
 
-        <CodeEditor :value="form.code" :language="form.language" />
+        <CodeEditor
+          :value="form.code"
+          :language="form.language"
+          :handle-change="changeCode"
+        />
         <a-button
           type="primary"
           size="large"
@@ -73,8 +77,8 @@ const loadData = async () => {
     message.error("加载失败，" + res.message);
   }
 };
-//代码的参数
 
+//代码的参数
 const form = ref({
   language: "java",
   code: "",
@@ -84,19 +88,28 @@ const form = ref({
  * 提交代码
  */
 const doSubmit = async () => {
-  const res = await QuestionSubmitControllerService.doQuestionSubmitUsingPost(
-    form.value
-  );
+  if (!question.value?.id) {
+    return;
+  }
+
+  const res = await QuestionSubmitControllerService.doQuestionSubmitUsingPost({
+    ...form.value,
+    questionId: question.value.id,
+  });
   if (res.code === 0) {
     message.success("提交成功");
   } else {
-    message.error("提交失败，" + res.message);
+    message.error("提交失败," + res.message);
   }
 };
 
 onMounted(() => {
   loadData();
 });
+
+const changeCode = (value: string) => {
+  form.value.code = value;
+};
 </script>
 
 <style scoped>
