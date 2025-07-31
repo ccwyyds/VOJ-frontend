@@ -124,7 +124,7 @@ import MdEditor from "@/components/MdEditor.vue";
 import { QuestionControllerService } from "../../../generated";
 import message from "@arco-design/web-vue/es/message";
 import CodeEditor from "@/components/CodeEditor.vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 const form = ref({
   title: "",
@@ -146,6 +146,7 @@ const form = ref({
 
 //区分添加和更新页面
 const route = useRoute();
+const router = useRouter();
 const updatePage = route.path.includes("update");
 //获取当前要修改的题目，把数据渲染到页面
 /**
@@ -209,6 +210,7 @@ const handleSubmit = async () => {
     );
     if (res.code === 0) {
       message.success("创建成功");
+      await router.push({ path: "/questions" });
     } else {
       message.error("创建失败，" + res.message);
     }

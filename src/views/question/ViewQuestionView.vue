@@ -11,7 +11,7 @@
                 style="font-size: 15px"
                 :bordered="false"
               >
-                <MdViewer :value="question?.content" />
+                <MdViewer :value="question?.content || ''" />
               </a-card>
             </a-tab-pane>
             <a-tab-pane key="doQuestion" title="点击做题"></a-tab-pane>
@@ -27,7 +27,7 @@
           <div style="display: flex; flex-direction: column">
             <div>题目编号：{{ question?.questionNum }}</div>
             <div style="margin-top: 20px">
-              提供者：{{ question?.userVO.userName }}
+              提供者：{{ question?.userVO?.userName || "未知" }}
             </div>
             <div style="margin-top: 20px">
               提交数：{{ question?.submitNum }}
@@ -36,13 +36,13 @@
               通过数：{{ question?.acceptedNum }}
             </div>
             <div style="margin-top: 20px">
-              时间限制：{{ question?.judgeConfig.timeLimit }} S
+              时间限制：{{ question?.judgeConfig?.timeLimit || 0 }} S
             </div>
             <div style="margin-top: 20px">
-              内存限制：{{ question?.judgeConfig.memoryLimit }} MB
+              内存限制：{{ question?.judgeConfig?.memoryLimit || 0 }} MB
             </div>
             <div style="margin-top: 20px">
-              堆栈限制：{{ question?.judgeConfig.stackLimit }} MB
+              堆栈限制：{{ question?.judgeConfig?.stackLimit || 0 }} MB
             </div>
           </div>
         </a-card>
@@ -67,16 +67,22 @@
 </template>
 
 <script setup lang="ts">
-import { QuestionControllerService, QuestionVO } from "../../../generated";
 import { useRoute } from "vue-router";
 import { computed, onMounted, ref } from "vue";
 import MdViewer from "@/components/MdViewer.vue";
 import { useRouter } from "vue-router";
+import { QuestionControllerService, QuestionVO } from "../../../generated";
+import { useStore } from "vuex";
+import ACCESS_ENUM from "@/permissions/AccessEnum";
 
 const router = useRouter();
+const store = useStore();
 
 const route = useRoute();
 const question = ref<QuestionVO>();
+
+// 获取用户信息
+const userInfo = computed(() => store.state.user.loginUser);
 
 const loadData = async () => {
   //获取题目id
@@ -96,9 +102,25 @@ onMounted(() => {
 
 const onTabChange = (key: string) => {
   if (key === "doQuestion") {
-    router.push({
-      path: `/do/question/${question.value?.id}`,
-    });
+    // 检查用户是否已登录
+    if (
+      !userInfo.value ||
+      !userInfo.value.userRole ||
+      userInfo.value.userRole === ACCESS_ENUM.NOT_LOGIN
+    ) {
+      // 未登录，跳转到登录页面
+      router.push({
+        path: "/user/login",
+        query: {
+          redirect: `/do/question/${question.value?.id}`,
+        },
+      });
+    } else {
+      // 已登录，直接跳转到做题页面
+      router.push({
+        path: `/do/question/${question.value?.id}`,
+      });
+    }
   }
 };
 </script>

@@ -33,12 +33,12 @@ export const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/questions",
-    name: "主页",
+    name: "题目浏览",
     component: QuestionsView,
   },
   {
     path: "/",
-    name: "题目浏览",
+    name: "主页",
     component: QuestionsView,
     meta: {
       hideInMenu: true,
@@ -54,10 +54,11 @@ export const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/view/question",
-    name: "题目浏览",
+    name: "题目详情",
     component: ViewQuestionsView,
     meta: {
-      access: ACCESS_ENUM.USER,
+      access: ACCESS_ENUM.NOT_LOGIN,
+      hideInMenu: true,
     },
   },
   {
@@ -67,7 +68,7 @@ export const routes: Array<RouteRecordRaw> = [
     props: true,
     meta: {
       access: ACCESS_ENUM.USER,
-      // hideInMenu: true,
+      hideInMenu: true,
     },
   },
   {

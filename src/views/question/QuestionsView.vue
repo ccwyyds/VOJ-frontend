@@ -12,7 +12,7 @@
         <a-input-tag v-model="searchParams.tags" placeholder="请输入标签" />
       </a-form-item>
       <a-form-item>
-        <a-button @click="doSubmit" type="primary">提交</a-button>
+        <a-button @click="doSubmit" type="primary">搜索</a-button>
       </a-form-item>
     </a-form>
 

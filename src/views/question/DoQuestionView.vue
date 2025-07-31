@@ -45,16 +45,12 @@
 </template>
 
 <script setup lang="ts">
-import {
-  QuestionControllerService,
-  QuestionSubmitControllerService,
-  QuestionVO,
-} from "../../../generated";
 import { useRoute } from "vue-router";
 import { onMounted, ref } from "vue";
 import CodeEditor from "@/components/CodeEditor.vue";
 import MdViewer from "@/components/MdViewer.vue";
 import message from "@arco-design/web-vue/es/message";
+import { QuestionControllerService, QuestionVO } from "../../../generated";
 
 const route = useRoute();
 const question = ref<QuestionVO>();
@@ -92,7 +88,7 @@ const doSubmit = async () => {
     return;
   }
 
-  const res = await QuestionSubmitControllerService.doQuestionSubmitUsingPost({
+  const res = await QuestionControllerService.doQuestionSubmitUsingPost({
     ...form.value,
     questionId: question.value.id,
   });

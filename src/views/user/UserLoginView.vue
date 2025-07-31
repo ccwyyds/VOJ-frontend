@@ -38,7 +38,7 @@
 import { reactive } from "vue";
 import { UserControllerService, UserLoginRequest } from "../../../generated";
 import message from "@arco-design/web-vue/es/message";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import store from "@/store";
 
 const form = reactive({
@@ -47,6 +47,7 @@ const form = reactive({
 } as UserLoginRequest);
 
 const router = useRouter();
+const route = useRoute();
 
 /**
  * 登录表单提交逻辑
@@ -55,7 +56,14 @@ const handleSubmit = async () => {
   const res = await UserControllerService.userLoginUsingPost(form);
   if (res.code === 0) {
     await store.dispatch("user/getLoginUser");
-    router.push({ path: "/", replace: true });
+    
+    // 获取重定向地址，如果没有则默认跳转到题目列表页
+    const redirect = route.query.redirect as string;
+    if (redirect) {
+      router.push({ path: redirect, replace: true });
+    } else {
+    router.push({ path: "/questions", replace: true });
+    }
   } else {
     message.error("登录失败," + res.message);
   }

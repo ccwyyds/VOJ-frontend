@@ -17,6 +17,18 @@ let animationId: number;
 
 const initCanvas = () => {
   if (!canvas.value) return;
+  
+  try {
+    const ctx = canvas.value.getContext("2d");
+    if (!ctx) {
+      console.warn('Canvas context not available');
+      return;
+    }
+  } catch (error) {
+    console.warn('Failed to get canvas context:', error);
+    return;
+  }
+  
   const ctx = canvas.value.getContext("2d");
   if (!ctx) return;
 
